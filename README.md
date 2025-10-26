@@ -26,3 +26,7 @@ Para garantir conformidade com o W3C Validator, submeta cada arquivo HTML indivi
 1. Acesse <https://validator.w3.org/>.
 2. Utilize a aba **Validate by File Upload**.
 3. Envie `index.html`, `projetos.html` e `cadastro.html` separadamente.
+
+## Entrega
+
+Crie um repositório público no GitHub contendo esta pasta `ProjetoSite` e compartilhe o link conforme solicitado na orientação do trabalho.

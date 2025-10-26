@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Cadastre-se como voluntário ou apoiador e faça parte da rede Impacta ONG.">
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css" media="(max-width: 960px)">
+    <title>Cadastro | Impacta ONG</title>
+</head>
+<body>
+    <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+    <header class="topbar" role="banner">
+        <div class="topbar__inner">
+            <a class="brand" href="index.html">
+                <img src="assets/icons/impacta-logo.svg" alt="Logotipo Impacta ONG" width="48" height="48">
+                <span>Impacta ONG</span>
+            </a>
+            <nav class="primary-nav" aria-label="Menu principal">
+                <ul class="primary-nav__list">
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="projetos.html">Projetos</a></li>
+                    <li><a href="cadastro.html" aria-current="page">Cadastre-se</a></li>
+                    <li><a href="index.html#contato">Contato</a></li>
+                </ul>
+            </nav>
+            <a class="cta-button" href="#form-voluntario">Inscrever-se</a>
+        </div>
+    </header>
+
+    <main id="conteudo">
+        <header class="page-header">
+            <h1>Faça parte da rede de impacto</h1>
+            <p>Preencha o formulário para se voluntariar, apoiar financeiramente ou indicar novos projetos. Levamos a segurança dos seus dados a sério.</p>
+        </header>
+
+        <section class="cadastro-voluntario" aria-labelledby="form-voluntario">
+            <div class="tex-media">
+                <div>
+                    <h2 id="form-voluntario">Cadastro de voluntariado</h2>
+                    <p>As informações abaixo nos ajudam a direcionar oportunidades alinhadas ao seu perfil e disponibilidade.</p>
+                    <form class="form" action="#" method="post">
+                        <fieldset>
+                            <legend>Informações pessoais</legend>
+                            <div class="form__grid">
+                                <div class="form__group">
+                                    <label for="nome">Nome completo</label>
+                                    <input id="nome" name="nome" type="text" autocomplete="name" required>
+                                </div>
+                                <div class="form__group">
+                                    <label for="email">E-mail</label>
+                                    <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required>
+                                </div>
+                                <div class="form__group">
+                                    <label for="cpf">CPF</label>
+                                    <input id="cpf" name="cpf" type="text" inputmode="numeric" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="000.000.000-00" maxlength="14" required>
+                                </div>
+                                <div class="form__group">
+                                    <label for="telefone">Telefone</label>
+                                    <input id="telefone" name="telefone" type="tel" inputmode="tel" pattern="\(\d{2}\) \d{4,5}-\d{4}" placeholder="(11) 99999-0000" maxlength="15" required>
+                                </div>
+                                <div class="form__group">
+                                    <label for="data-nascimento">Data de nascimento</label>
+                                    <input id="data-nascimento" name="data-nascimento" type="date" max="2006-12-31" required>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Endereço</legend>
+                            <div class="form__grid">
+                                <div class="form__group">
+                                    <label for="endereco">Logradouro</label>
+                                    <input id="endereco" name="endereco" type="text" autocomplete="address-line1" required>
+                                </div>
+                                <div class="form__group">
+                                    <label for="numero">Número</label>
+                                    <input id="numero" name="numero" type="text" autocomplete="address-line2" required>
+                                </div>
+                                <div class="form__group">
+                                    <label for="complemento">Complemento</label>
+                                    <input id="complemento" name="complemento" type="text" autocomplete="address-line2">
+                                </div>
+                                <div class="form__group">
+                                    <label for="cep">CEP</label>
+                                    <input id="cep" name="cep" type="text" inputmode="numeric" pattern="\d{5}-\d{3}" placeholder="00000-000" maxlength="9" required>
+                                </div>
+                                <div class="form__group">
+                                    <label for="cidade">Cidade</label>
+                                    <input id="cidade" name="cidade" type="text" autocomplete="address-level2" required>
+                                </div>
+                                <div class="form__group">
+                                    <label for="estado">Estado</label>
+                                    <select id="estado" name="estado" autocomplete="address-level1" required>
+                                        <option value="" disabled selected>Selecione</option>
+                                        <option>AC</option>
+                                        <option>AL</option>
+                                        <option>AP</option>
+                                        <option>AM</option>
+                                        <option>BA</option>
+                                        <option>CE</option>
+                                        <option>DF</option>
+                                        <option>ES</option>
+                                        <option>GO</option>
+                                        <option>MA</option>
+                                        <option>MT</option>
+                                        <option>MS</option>
+                                        <option>MG</option>
+                                        <option>PA</option>
+                                        <option>PB</option>
+                                        <option>PR</option>
+                                        <option>PE</option>
+                                        <option>PI</option>
+                                        <option>RJ</option>
+                                        <option>RN</option>
+                                        <option>RS</option>
+                                        <option>RO</option>
+                                        <option>RR</option>
+                                        <option>SC</option>
+                                        <option>SP</option>
+                                        <option>SE</option>
+                                        <option>TO</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Interesses</legend>
+                            <div class="form__grid">
+                                <div class="form__group">
+                                    <label for="disponibilidade">Disponibilidade semanal</label>
+                                    <select id="disponibilidade" name="disponibilidade" required>
+                                        <option value="" disabled selected>Selecione</option>
+                                        <option value="ate-2h">Até 2 horas</option>
+                                        <option value="2-4h">De 2 a 4 horas</option>
+                                        <option value="4-8h">De 4 a 8 horas</option>
+                                        <option value="mais-8h">Mais de 8 horas</option>
+                                    </select>
+                                </div>
+                                <div class="form__group">
+                                    <label for="atuacao">Área de atuação desejada</label>
+                                    <select id="atuacao" name="atuacao" required>
+                                        <option value="" disabled selected>Selecione</option>
+                                        <option value="educacao">Educação</option>
+                                        <option value="saude">Saúde</option>
+                                        <option value="meio-ambiente">Meio ambiente</option>
+                                        <option value="comunicacao">Comunicação</option>
+                                        <option value="gestao">Gestão e processos</option>
+                                    </select>
+                                </div>
+                                <div class="form__group form__group--full">
+                                    <label for="motivacao">Conte um pouco sobre sua motivação</label>
+                                    <textarea id="motivacao" name="motivacao" rows="4" required></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="form__actions">
+                            <button type="submit" class="cta-button">Enviar inscrição</button>
+                            <p class="form__note">Ao enviar, você concorda com nossa política de privacidade.</p>
+                        </div>
+                    </form>
+                </div>
+                <figure>
+                    <picture>
+                        <source srcset="assets/images/cadastroseguro-card.webp" type="image/webp">
+                        <img src="assets/images/cadastroseguro-card.jpg" width="640" height="426" loading="lazy" alt="Pessoa voluntária preenchendo formulário digital com segurança de dados">
+                    </picture>
+                    <figcaption>Cadastro seguro com validação automática de dados.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="cadastro-doadores" id="cadastro-doadores" aria-labelledby="apoio-financeiro">
+            <div class="section-header">
+                <h2 id="apoio-financeiro">Apoie financeiramente</h2>
+                <p>Oferecemos recibos automáticos, relatórios trimestrais e acompanhamento do uso dos recursos.</p>
+            </div>
+            <div class="captacao__cards">
+                <article>
+                    <h3>Doação recorrente</h3>
+                    <p>Escolha o valor mensal e acompanhe o progresso das metas em tempo real.</p>
+                </article>
+                <article>
+                    <h3>Doação pontual</h3>
+                    <p>Pagamento via cartão, boleto ou PIX com segurança e certificado digital.</p>
+                </article>
+                <article>
+                    <h3>Transparência total</h3>
+                    <p>Relatórios de prestação de contas enviados diretamente para o seu e-mail.</p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer__inner">
+            <p>&copy; <span id="ano-atual"></span> Impacta ONG. Todos os direitos reservados.</p>
+            <nav aria-label="Links complementares">
+                <a href="index.html">Início</a>
+                <a href="projetos.html">Projetos</a>
+                <a href="#form-voluntario">Formulário</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script src="js/main.js" defer></script>
+    <script src="js/masks.js" defer></script>
+</body>
+</html>
