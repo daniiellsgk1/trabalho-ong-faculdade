@@ -17,15 +17,37 @@
                 <img src="assets/icons/impacta-logo.svg" alt="Logotipo Impacta ONG" width="48" height="48">
                 <span>Impacta ONG</span>
             </a>
-            <nav class="primary-nav" aria-label="Menu principal">
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+                <span class="nav-toggle__bar"></span>
+                <span class="nav-toggle__bar"></span>
+                <span class="nav-toggle__bar"></span>
+                <span class="sr-only">Abrir menu</span>
+            </button>
+            <nav class="primary-nav" id="primary-navigation" aria-label="Menu principal">
                 <ul class="primary-nav__list">
-                    <li><a href="index.html">Início</a></li>
-                    <li><a href="projetos.html" aria-current="page">Projetos</a></li>
-                    <li><a href="cadastro.html">Cadastre-se</a></li>
-                    <li><a href="index.html#contato">Contato</a></li>
+                    <li class="primary-nav__item">
+                        <a class="primary-nav__link" href="index.html">Início</a>
+                    </li>
+                    <li class="primary-nav__item primary-nav__item--has-children is-active">
+                        <button class="primary-nav__trigger" type="button" aria-expanded="false" aria-controls="submenu-projetos">
+                            Projetos
+                            <span class="primary-nav__icon" aria-hidden="true"></span>
+                        </button>
+                        <ul class="primary-nav__submenu" id="submenu-projetos">
+                            <li><a class="primary-nav__submenu-link" href="projetos.html" aria-current="page">Ver projetos</a></li>
+                            <li><a class="primary-nav__submenu-link" href="#voluntariado">Portal do voluntariado</a></li>
+                            <li><a class="primary-nav__submenu-link" href="#indicadores-projetos">Captação de recursos</a></li>
+                        </ul>
+                    </li>
+                    <li class="primary-nav__item">
+                        <a class="primary-nav__link" href="cadastro.html">Cadastre-se</a>
+                    </li>
+                    <li class="primary-nav__item">
+                        <a class="primary-nav__link" href="index.html#contato">Contato</a>
+                    </li>
                 </ul>
             </nav>
-            <a class="cta-button" href="cadastro.html">Faça parte</a>
+            <a class="cta-button" href="cadastro.html">Inscreva-se</a>
         </div>
     </header>
 
@@ -49,7 +71,7 @@
                 <div class="projeto-card__body">
                     <header>
                         <h3>Programa Educa Futuro</h3>
-                        <p class="projeto-card__tag">Educação &amp; tecnologia</p>
+                        <p class="badge badge--info">Educação &amp; tecnologia</p>
                     </header>
                     <p>Oferece oficinas de programação e pensamento crítico para jovens de escolas públicas. O projeto já impactou 2.300 estudantes e conta com voluntários mentores.</p>
                     <ul class="projeto-card__indicadores" aria-label="Indicadores do Programa Educa Futuro">
@@ -59,7 +81,7 @@
                     </ul>
                     <div class="projeto-card__acoes">
                         <a class="secondary-button" href="cadastro.html#form-voluntario">Quero ser voluntário</a>
-                        <a class="cta-link" href="cadastro.html#cadastro-doadores">Quero doar</a>
+                        <a class="cta-link" href="cadastro.html#cadastro-doadores">Faça sua doação</a>
                     </div>
                 </div>
             </article>
@@ -72,7 +94,7 @@
                 <div class="projeto-card__body">
                     <header>
                         <h3>Saúde no Território</h3>
-                        <p class="projeto-card__tag">Saúde comunitária</p>
+                        <p class="badge badge--success">Saúde comunitária</p>
                     </header>
                     <p>Unidades móveis levam atendimentos preventivos a regiões ribeirinhas. Além da equipe fixa, voluntários especialistas orientam famílias sobre cuidados em saúde.</p>
                     <ul class="projeto-card__indicadores" aria-label="Indicadores do Saúde no Território">
@@ -82,7 +104,7 @@
                     </ul>
                     <div class="projeto-card__acoes">
                         <a class="secondary-button" href="cadastro.html#form-voluntario">Participar do mutirão</a>
-                        <a class="cta-link" href="cadastro.html#cadastro-doadores">Doar agora</a>
+                        <a class="cta-link" href="cadastro.html#cadastro-doadores">Faça sua doação</a>
                     </div>
                 </div>
             </article>
@@ -95,7 +117,7 @@
                 <div class="projeto-card__body">
                     <header>
                         <h3>Raízes do Amanhã</h3>
-                        <p class="projeto-card__tag">Meio ambiente</p>
+                        <p class="badge badge--warning">Meio ambiente</p>
                     </header>
                     <p>Campanha permanente de reflorestamento e educação ambiental em áreas degradadas. Cada voluntário planta e monitora mudas com apoio de tecnologia georreferenciada.</p>
                     <ul class="projeto-card__indicadores" aria-label="Indicadores do Raízes do Amanhã">
@@ -105,7 +127,7 @@
                     </ul>
                     <div class="projeto-card__acoes">
                         <a class="secondary-button" href="cadastro.html#form-voluntario">Ajudar no plantio</a>
-                        <a class="cta-link" href="cadastro.html#cadastro-doadores">Apoiar financeiramente</a>
+                        <a class="cta-link" href="cadastro.html#cadastro-doadores">Faça sua doação</a>
                     </div>
                 </div>
             </article>
@@ -121,7 +143,7 @@
                         <li>Candidate-se e acompanhe o status da inscrição.</li>
                         <li>Receba feedbacks e certificados após cada missão.</li>
                     </ol>
-                    <a class="cta-button" href="cadastro.html#form-voluntario">Cadastre-se como voluntário</a>
+                    <a class="cta-button" href="cadastro.html#form-voluntario">Inscreva-se</a>
                 </div>
                 <figure>
                     <picture>
@@ -155,16 +177,16 @@
                 <h2 id="captacao">Captação de recursos com transparência</h2>
                 <p>Campanhas de arrecadação com metas claras e prestação de contas automatizada para cada projeto.</p>
             </div>
-            <div class="captacao__cards">
-                <article>
+            <div class="captacao__cards card-grid">
+                <article class="card">
                     <h3>Campanhas recorrentes</h3>
                     <p>Permitem doações mensais com recibos fiscais automáticos e projeções de impacto.</p>
                 </article>
-                <article>
+                <article class="card">
                     <h3>Doações pontuais</h3>
                     <p>Integração segura com plataformas de pagamento e QR Code PIX gerado em tempo real.</p>
                 </article>
-                <article>
+                <article class="card">
                     <h3>Prestação de contas</h3>
                     <p>Relatórios em PDF e dashboards interativos disponíveis para doadores e imprensa.</p>
                 </article>
@@ -175,11 +197,7 @@
     <footer class="site-footer">
         <div class="site-footer__inner">
             <p>&copy; <span id="ano-atual"></span> Impacta ONG. Todos os direitos reservados.</p>
-            <nav aria-label="Links complementares">
-                <a href="index.html">Início</a>
-                <a href="cadastro.html">Seja voluntário</a>
-                <a href="#captacao">Doações</a>
-            </nav>
+            <p>Rua Tim Melo, 62 - Vila Capri, Araruama - RJ | CNPJ 12.345.678/0001-99</p>
         </div>
     </footer>
 

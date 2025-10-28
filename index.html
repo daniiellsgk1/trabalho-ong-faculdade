@@ -17,15 +17,37 @@
                 <img src="assets/icons/impacta-logo.svg" alt="Logotipo Impacta ONG" width="48" height="48">
                 <span>Impacta ONG</span>
             </a>
-            <nav class="primary-nav" aria-label="Menu principal">
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+                <span class="nav-toggle__bar"></span>
+                <span class="nav-toggle__bar"></span>
+                <span class="nav-toggle__bar"></span>
+                <span class="sr-only">Abrir menu</span>
+            </button>
+            <nav class="primary-nav" id="primary-navigation" aria-label="Menu principal">
                 <ul class="primary-nav__list">
-                    <li><a href="index.html" aria-current="page">Início</a></li>
-                    <li><a href="projetos.html">Projetos</a></li>
-                    <li><a href="cadastro.html">Cadastre-se</a></li>
-                    <li><a href="#contato">Contato</a></li>
+                    <li class="primary-nav__item">
+                        <a class="primary-nav__link" href="index.html" aria-current="page">Início</a>
+                    </li>
+                    <li class="primary-nav__item primary-nav__item--has-children">
+                        <button class="primary-nav__trigger" type="button" aria-expanded="false" aria-controls="submenu-projetos">
+                            Projetos
+                            <span class="primary-nav__icon" aria-hidden="true"></span>
+                        </button>
+                        <ul class="primary-nav__submenu" id="submenu-projetos">
+                            <li><a class="primary-nav__submenu-link" href="projetos.html">Ver projetos</a></li>
+                            <li><a class="primary-nav__submenu-link" href="projetos.html#voluntariado">Portal do voluntariado</a></li>
+                            <li><a class="primary-nav__submenu-link" href="projetos.html#indicadores-projetos">Captação de recursos</a></li>
+                        </ul>
+                    </li>
+                    <li class="primary-nav__item">
+                        <a class="primary-nav__link" href="cadastro.html">Cadastre-se</a>
+                    </li>
+                    <li class="primary-nav__item">
+                        <a class="primary-nav__link" href="#contato">Contato</a>
+                    </li>
                 </ul>
             </nav>
-            <a class="cta-button" href="cadastro.html">Quero me engajar</a>
+            <a class="cta-button" href="cadastro.html">Inscreva-se</a>
         </div>
     </header>
 
@@ -42,7 +64,7 @@
                 <p>Conectamos organizações, voluntários e apoiadores para transformar comunidades por meio de projetos sociais monitorados e transparentes.</p>
                 <div class="hero__actions">
                     <a class="cta-button" href="projetos.html">Conheça projetos</a>
-                    <a class="secondary-button" href="cadastro.html">Faça parte da rede</a>
+                    <a class="secondary-button" href="cadastro.html">Inscreva-se</a>
                 </div>
             </div>
         </section>
@@ -188,14 +210,24 @@
         </section>
     </main>
 
+    <div class="modal" id="ui-modal" role="dialog" aria-modal="true" aria-labelledby="ui-modal-title" aria-hidden="true" hidden>
+        <div class="modal__dialog">
+            <header class="modal__header">
+                <h3 class="modal__title" id="ui-modal-title">Detalhes rápidos</h3>
+                <button class="modal__close" type="button" aria-label="Fechar modal" data-modal-close>&times;</button>
+            </header>
+            <p>Use os componentes modais para compartilhar resultados, confirmações ou avisos importantes sem sair da página.</p>
+            <div class="modal__actions">
+                <button class="secondary-button" type="button" data-modal-close>Entendi</button>
+                <button class="cta-button" type="button" data-modal-close>Continuar</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="site-footer">
         <div class="site-footer__inner">
             <p>&copy; <span id="ano-atual"></span> Impacta ONG. Todos os direitos reservados.</p>
-            <nav aria-label="Links complementares">
-                <a href="projetos.html">Projetos</a>
-                <a href="cadastro.html">Seja voluntário</a>
-                <a href="cadastro.html#cadastro-doadores">Quero doar</a>
-            </nav>
+            <p>Rua Tim Melo, 62 - Vila Capri, Araruama - RJ | CNPJ 12.345.678/0001-99</p>
         </div>
     </footer>
 
