@@ -1,10 +1,25 @@
-document.addEventListener("DOMContentLoaded", () => {
+(() => {
+    const ImpactaApp = window.ImpactaApp || {};
+    const focusableSelectors = [
+        "a[href]",
+        "button:not([disabled])",
+        "textarea:not([disabled])",
+        "input:not([disabled])",
+        "select:not([disabled])",
+        "[tabindex]:not([tabindex='-1'])",
+    ].join(",");
+
+    const mobileMediaQuery = window.matchMedia("(max-width: 960px)");
+    let activeModal = null;
+    let lastFocusedElement = null;
+    let navInitialized = false;
+    let escapeListenerAttached = false;
+
     const yearPlaceholder = document.getElementById("ano-atual");
     if (yearPlaceholder) {
         yearPlaceholder.textContent = new Date().getFullYear();
     }
 
-    // Improve keyboard focus outline for skip link on Safari/Firefox when using mouse first
     const skipLink = document.querySelector(".skip-link");
     if (skipLink) {
         skipLink.addEventListener("click", () => skipLink.classList.remove("is-visible"));
@@ -12,16 +27,59 @@ document.addEventListener("DOMContentLoaded", () => {
         skipLink.addEventListener("blur", () => skipLink.classList.remove("is-visible"));
     }
 
-    const navToggle = document.querySelector(".nav-toggle");
-    const primaryNav = document.getElementById("primary-navigation");
-    const mobileMediaQuery = window.matchMedia("(max-width: 960px)");
+    const ensureToastStack = () => {
+        let stack = document.querySelector(".toast-stack");
+        if (!stack) {
+            stack = document.createElement("div");
+            stack.className = "toast-stack";
+            stack.setAttribute("aria-live", "polite");
+            stack.setAttribute("aria-atomic", "true");
+            document.body.appendChild(stack);
+        }
+        return stack;
+    };
 
-    if (navToggle && primaryNav) {
+    const createToast = (message, variant = "info") => {
+        const stack = ensureToastStack();
+        const toast = document.createElement("div");
+        toast.className = `toast toast--${variant}`;
+        toast.innerHTML = `
+            <span>${message}</span>
+            <button type="button" class="toast__close" aria-label="Fechar notificação">&times;</button>
+        `;
+
+        const removeToast = () => {
+            toast.style.animation = "toast-out 0.25s forwards";
+            toast.addEventListener("animationend", () => toast.remove(), { once: true });
+        };
+
+        const closeButton = toast.querySelector(".toast__close");
+        if (closeButton) {
+            closeButton.addEventListener("click", removeToast, { once: true });
+        }
+
+        stack.appendChild(toast);
+        setTimeout(removeToast, 5000);
+    };
+
+    const initNavigation = () => {
+        if (navInitialized) {
+            return;
+        }
+
+        const navToggle = document.querySelector(".nav-toggle");
+        const primaryNav = document.getElementById("primary-navigation");
+        if (!navToggle || !primaryNav) {
+            return;
+        }
+
         const dropdownTriggers = Array.from(primaryNav.querySelectorAll(".primary-nav__trigger"));
 
         const closeAllSubmenus = (exception) => {
             dropdownTriggers.forEach((trigger) => {
-                if (trigger === exception) return;
+                if (trigger === exception) {
+                    return;
+                }
                 trigger.setAttribute("aria-expanded", "false");
                 const item = trigger.closest(".primary-nav__item");
                 if (item) {
@@ -54,11 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const closeNav = () => setNavState(false);
 
-        navToggle.addEventListener("click", () => {
-            const isExpanded = navToggle.getAttribute("aria-expanded") === "true";
-            setNavState(!isExpanded);
-        });
-
         const syncNavForViewport = () => {
             if (mobileMediaQuery.matches) {
                 primaryNav.setAttribute("aria-hidden", "true");
@@ -68,6 +121,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 setNavState(false);
             }
         };
+
+        navToggle.addEventListener("click", () => {
+            const isExpanded = navToggle.getAttribute("aria-expanded") === "true";
+            setNavState(!isExpanded);
+        });
 
         mobileMediaQuery.addEventListener("change", syncNavForViewport);
         syncNavForViewport();
@@ -107,8 +165,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.addEventListener("click", (event) => {
             const target = event.target;
-            if (navToggle.contains(target)) return;
-            if (primaryNav.contains(target)) return;
+            if (navToggle.contains(target)) {
+                return;
+            }
+            if (primaryNav.contains(target)) {
+                return;
+            }
 
             closeAllSubmenus();
             if (mobileMediaQuery.matches && document.body.classList.contains("nav-open")) {
@@ -125,61 +187,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         });
-    }
 
-    const ensureToastStack = () => {
-        let stack = document.querySelector(".toast-stack");
-        if (!stack) {
-            stack = document.createElement("div");
-            stack.className = "toast-stack";
-            stack.setAttribute("aria-live", "polite");
-            stack.setAttribute("aria-atomic", "true");
-            document.body.appendChild(stack);
-        }
-        return stack;
+        navInitialized = true;
     };
-
-    const createToast = (message, variant = "info") => {
-        const stack = ensureToastStack();
-        const toast = document.createElement("div");
-        toast.className = `toast toast--${variant}`;
-        toast.innerHTML = `
-            <span>${message}</span>
-            <button type="button" class="toast__close" aria-label="Fechar notificação">&times;</button>
-        `;
-
-        const removeToast = () => {
-            toast.style.animation = "toast-out 0.25s forwards";
-            toast.addEventListener("animationend", () => toast.remove());
-        };
-
-        toast.querySelector(".toast__close").addEventListener("click", removeToast);
-        stack.appendChild(toast);
-        setTimeout(removeToast, 5000);
-    };
-
-    document.querySelectorAll("[data-toast-trigger]").forEach((button) => {
-        button.addEventListener("click", () => {
-            const message = button.getAttribute("data-toast-message") || "Notificação enviada.";
-            const variant = button.getAttribute("data-toast-variant") || "info";
-            createToast(message, variant);
-        });
-    });
-
-    const focusableSelectors = [
-        "a[href]",
-        "button:not([disabled])",
-        "textarea:not([disabled])",
-        "input:not([disabled])",
-        "select:not([disabled])",
-        "[tabindex]:not([tabindex='-1'])"
-    ].join(",");
-
-    let activeModal = null;
-    let lastFocusedElement = null;
 
     const openModal = (modal) => {
-        if (!modal) return;
+        if (!modal) {
+            return;
+        }
         lastFocusedElement = document.activeElement;
         modal.classList.add("is-open");
         modal.removeAttribute("hidden");
@@ -196,11 +211,15 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const closeModal = (modal) => {
-        if (!modal) return;
+        if (!modal) {
+            return;
+        }
+
         modal.classList.remove("is-open");
         modal.setAttribute("aria-hidden", "true");
         modal.setAttribute("hidden", "");
         document.body.classList.remove("modal-open");
+
         if (lastFocusedElement) {
             lastFocusedElement.focus();
         }
@@ -208,69 +227,190 @@ document.addEventListener("DOMContentLoaded", () => {
         lastFocusedElement = null;
     };
 
-    document.querySelectorAll("[data-modal-open]").forEach((trigger) => {
-        const targetSelector = trigger.getAttribute("data-modal-open");
-        const modal = document.querySelector(targetSelector);
-        if (!modal) return;
-
-        trigger.addEventListener("click", (event) => {
-            event.preventDefault();
-            openModal(modal);
-        });
-    });
-
-    document.querySelectorAll("[data-modal-close]").forEach((button) => {
-        button.addEventListener("click", () => closeModal(button.closest(".modal")));
-    });
-
-    document.querySelectorAll(".modal").forEach((modal) => {
-        modal.addEventListener("click", (event) => {
-            if (event.target === modal) {
-                closeModal(modal);
-            }
-        });
-    });
-
-    document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && activeModal) {
-            closeModal(activeModal);
+    const watchEscapeKey = () => {
+        if (escapeListenerAttached) {
+            return;
         }
-    });
-
-    const forms = document.querySelectorAll(".form");
-
-    forms.forEach((form) => {
-        const fields = Array.from(form.querySelectorAll("input, select, textarea"));
-
-        const updateFieldState = (field, touched = false) => {
-            if (touched) {
-                field.dataset.touched = "true";
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && activeModal) {
+                closeModal(activeModal);
             }
+        });
+        escapeListenerAttached = true;
+    };
 
-            const hasBeenTouched = touched || field.dataset.touched === "true";
-            const group = field.closest(".form__group");
-            if (!group) return;
+    const bindModalTriggers = (root = document) => {
+        const openers = root.querySelectorAll("[data-modal-open]");
+        openers.forEach((trigger) => {
+            if (trigger.dataset.modalBound === "true") {
+                return;
+            }
+            const targetSelector = trigger.getAttribute("data-modal-open");
+            trigger.addEventListener("click", (event) => {
+                event.preventDefault();
+                const modal = document.querySelector(targetSelector);
+                openModal(modal);
+            });
+            trigger.dataset.modalBound = "true";
+        });
 
-            const feedback = group.querySelector(".form__feedback");
-            const isValid = field.checkValidity();
-            const hasValue = field.value && field.value.trim() !== "";
+        const closers = root.querySelectorAll("[data-modal-close]");
+        closers.forEach((button) => {
+            if (button.dataset.modalCloseBound === "true") {
+                return;
+            }
+            button.addEventListener("click", () => closeModal(button.closest(".modal")));
+            button.dataset.modalCloseBound = "true";
+        });
 
-            field.setAttribute("aria-invalid", String(!isValid));
-            group.classList.toggle("is-invalid", !isValid && hasBeenTouched);
-            group.classList.toggle("is-valid", isValid && hasValue);
-
-            if (feedback) {
-                if (!hasBeenTouched) {
-                    feedback.textContent = "";
-                } else if (!isValid) {
-                    feedback.textContent = field.validationMessage;
-                } else if (hasValue) {
-                    feedback.textContent = "Tudo certo!";
-                } else {
-                    feedback.textContent = "";
+        const modals = root.querySelectorAll(".modal");
+        modals.forEach((modal) => {
+            if (modal.dataset.modalOutsideBound === "true") {
+                return;
+            }
+            modal.addEventListener("click", (event) => {
+                if (event.target === modal) {
+                    closeModal(modal);
                 }
+            });
+            modal.dataset.modalOutsideBound = "true";
+        });
+
+        watchEscapeKey();
+    };
+
+    const bindToastTriggers = (root = document) => {
+        const triggers = root.querySelectorAll("[data-toast-trigger]");
+        triggers.forEach((button) => {
+            if (button.dataset.toastBound === "true") {
+                return;
             }
-        };
+            button.addEventListener("click", () => {
+                const message = button.getAttribute("data-toast-message") || "Notificação enviada.";
+                const variant = button.getAttribute("data-toast-variant") || "info";
+                createToast(message, variant);
+            });
+            button.dataset.toastBound = "true";
+        });
+    };
+
+    const computeStorageKey = (form) => {
+        if (form.dataset.storageKey) {
+            return form.dataset.storageKey;
+        }
+        if (form.id) {
+            return `impacta:form:${form.id}`;
+        }
+        const closestSection = form.closest("section[id]");
+        if (closestSection) {
+            return `impacta:form:${closestSection.id}`;
+        }
+        return `impacta:form:${Array.from(document.querySelectorAll(".form")).indexOf(form)}`;
+    };
+
+    const persistFormData = (form, key) => {
+        try {
+            const payload = {};
+            Array.from(form.elements).forEach((field) => {
+                if (!field.name) {
+                    return;
+                }
+
+                if (field.type === "checkbox") {
+                    payload[field.name] = field.checked;
+                } else if (field.type === "radio") {
+                    if (!payload[field.name]) {
+                        payload[field.name] = null;
+                    }
+                    if (field.checked) {
+                        payload[field.name] = field.value;
+                    }
+                } else {
+                    payload[field.name] = field.value;
+                }
+            });
+            localStorage.setItem(key, JSON.stringify(payload));
+        } catch {
+            /* armazenamento não disponível */
+        }
+    };
+
+    const restoreFormData = (form, key, fields) => {
+        try {
+            const payload = localStorage.getItem(key);
+            if (!payload) {
+                return;
+            }
+            const data = JSON.parse(payload);
+            fields.forEach((field) => {
+                if (!field.name || !(field.name in data)) {
+                    return;
+                }
+                const value = data[field.name];
+                if (field.type === "checkbox") {
+                    field.checked = Boolean(value);
+                } else if (field.type === "radio") {
+                    field.checked = field.value === value;
+                } else {
+                    field.value = value;
+                }
+            });
+        } catch {
+            /* leitura ignorada */
+        }
+    };
+
+    const clearFormData = (key) => {
+        try {
+            localStorage.removeItem(key);
+        } catch {
+            /* nada a remover */
+        }
+    };
+
+    const updateFieldState = (field, touched = false) => {
+        if (touched) {
+            field.dataset.touched = "true";
+        }
+
+        const hasBeenTouched = touched || field.dataset.touched === "true";
+        const group = field.closest(".form__group");
+        if (!group) {
+            return;
+        }
+
+        const feedback = group.querySelector(".form__feedback");
+        const isValid = field.checkValidity();
+        const hasValue = field.value && field.value.trim() !== "";
+
+        field.setAttribute("aria-invalid", String(!isValid));
+        group.classList.toggle("is-invalid", !isValid && hasBeenTouched);
+        group.classList.toggle("is-valid", isValid && hasValue);
+
+        if (!feedback) {
+            return;
+        }
+
+        if (!hasBeenTouched) {
+            feedback.textContent = "";
+        } else if (!isValid) {
+            feedback.textContent = field.validationMessage;
+        } else if (hasValue) {
+            feedback.textContent = "Tudo certo!";
+        } else {
+            feedback.textContent = "";
+        }
+    };
+
+    const bindForm = (form) => {
+        if (form.dataset.formBound === "true") {
+            return;
+        }
+
+        const fields = Array.from(form.querySelectorAll("input, select, textarea"));
+        const storageKey = computeStorageKey(form);
+
+        restoreFormData(form, storageKey, fields);
 
         fields.forEach((field) => {
             if (!field.hasAttribute("aria-invalid")) {
@@ -278,22 +418,28 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             field.addEventListener("blur", () => updateFieldState(field, true));
-            field.addEventListener("input", () => updateFieldState(field));
-            field.addEventListener("change", () => updateFieldState(field));
+            field.addEventListener("input", () => {
+                updateFieldState(field);
+                persistFormData(form, storageKey);
+            });
+            field.addEventListener("change", () => {
+                updateFieldState(field);
+                persistFormData(form, storageKey);
+            });
         });
 
         form.addEventListener("submit", (event) => {
             event.preventDefault();
-            let formIsValid = true;
+            let isValidForm = true;
 
             fields.forEach((field) => {
                 updateFieldState(field, true);
                 if (!field.checkValidity()) {
-                    formIsValid = false;
+                    isValidForm = false;
                 }
             });
 
-            if (!formIsValid) {
+            if (!isValidForm) {
                 createToast("Revise os campos destacados antes de enviar.", "error");
                 const firstInvalid = fields.find((field) => !field.checkValidity());
                 if (firstInvalid) {
@@ -321,6 +467,57 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
             });
+
+            clearFormData(storageKey);
         });
-    });
-});
+
+        form.dataset.storageKey = storageKey;
+        form.dataset.formBound = "true";
+    };
+
+    const enhanceForms = (root = document) => {
+        const forms = root.querySelectorAll(".form");
+        forms.forEach((form) => bindForm(form));
+    };
+
+    const enhanceDynamicContent = (root = document) => {
+        bindToastTriggers(root);
+        bindModalTriggers(root);
+        enhanceForms(root);
+        if (window.ImpactaApp && typeof window.ImpactaApp.applyMasks === "function") {
+            window.ImpactaApp.applyMasks(root);
+        }
+    };
+
+    const notifyViewChange = (root = document) => {
+        const event = new CustomEvent("impacta:viewchange", { detail: { root } });
+        window.dispatchEvent(event);
+    };
+
+    const initialise = () => {
+        initNavigation();
+        enhanceDynamicContent(document);
+        watchEscapeKey();
+        notifyViewChange(document);
+        window.dispatchEvent(new CustomEvent("impacta:ready"));
+    };
+
+    ImpactaApp.createToast = createToast;
+    ImpactaApp.ensureToastStack = ensureToastStack;
+    ImpactaApp.openModal = openModal;
+    ImpactaApp.closeModal = closeModal;
+    ImpactaApp.enhanceForms = enhanceForms;
+    ImpactaApp.enhanceDynamic = enhanceDynamicContent;
+    ImpactaApp.afterViewChange = (root = document) => {
+        enhanceDynamicContent(root);
+        notifyViewChange(root);
+    };
+
+    window.ImpactaApp = ImpactaApp;
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initialise, { once: true });
+    } else {
+        initialise();
+    }
+})();
